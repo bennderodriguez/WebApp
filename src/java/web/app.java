@@ -13,6 +13,8 @@ import javax.servlet.http.HttpServletResponse;
 
 import java.io.*;
 import java.util.*;
+import javax.servlet.RequestDispatcher;
+import javax.servlet.ServletContext;
 
 /**
  *
@@ -26,6 +28,11 @@ public class app extends HttpServlet {
     private String aux;
     private String resulset;
 
+    public app() {
+        this.resulset = "";
+    }
+
+    
     /**
      * Processes requests for both HTTP <code>GET</code> and <code>POST</code>
      * methods.
@@ -39,6 +46,9 @@ public class app extends HttpServlet {
             throws ServletException, IOException {
         response.setContentType("text/html;charset=UTF-8");
         try (PrintWriter out = response.getWriter()) {
+            ServletContext sc = this.getServletContext();
+            RequestDispatcher rd = sc.getRequestDispatcher("/header.jsp");
+            rd.include(request, response);
             /* TODO output your page here. You may use following sample code. */
             String req = request.getParameter("p");
 
@@ -58,6 +68,10 @@ public class app extends HttpServlet {
                     
             out.println("</body>");
             out.println("</html>");
+            
+            ServletContext sc2 = this.getServletContext();
+            RequestDispatcher rd2 = sc2.getRequestDispatcher("/footer.jsp");
+            rd2.include(request, response);
         }
     }
 
@@ -120,6 +134,8 @@ public class app extends HttpServlet {
         //Se lee la primera linea
         aux = br.readLine();
         //mientras haya lineas en Salida
+        
+        
         while (aux != null) {
             /*Se inicializa setresult*/
             this.resulset += aux;
@@ -128,6 +144,7 @@ public class app extends HttpServlet {
     }
 
     private String getAux() {
+        System.out.println("resulset " + this.resulset);
         if (this.resulset == null) {
             return "";
         } else {
